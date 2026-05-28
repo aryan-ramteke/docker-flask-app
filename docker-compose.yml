@@ -4,7 +4,7 @@ services:
     container_name: flask
     ports:
       - 80:5000
-    env_file: ".env"
+    env_file: "env_file.env"
     depends_on:
       mysql-app:
         condition: service_healthy
@@ -16,7 +16,7 @@ services:
   mysql-app:
     image: mysql:latest
     container_name: mysql
-    env_file: ".env"
+    env_file: "env_file.env"
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
       interval: 10s
