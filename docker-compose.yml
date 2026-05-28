@@ -1,0 +1,35 @@
+services:
+  flask-app:
+    build: .
+    container_name: flask
+    ports:
+      - 80:5000
+    env_file: ".env"
+    depends_on:
+      mysql-app:
+        condition: service_healthy
+    networks:
+      - flask
+    volumes:
+      - flask-app-vol:/app
+
+  mysql-app:
+    image: mysql:latest
+    container_name: mysql
+    env_file: ".env"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks:
+      - flask
+    volumes:
+      - mysql-app-vol:/var/lib/mysql
+
+networks:
+  flask:
+volumes:
+  flask-app-vol:
+  mysql-app-vol:
